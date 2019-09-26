@@ -1,5 +1,5 @@
 <template>
-  <v-carousel height = "400" style="border-top: 1px solid #D7D7D7; border-left: 1px solid #D7D7D7" cycle :continuous="false">
+  <v-carousel cycle style="border-top: 1px solid #D7D7D7; border-left: 1px solid #D7D7D7" >
     <v-carousel-item
       v-for="(post,i) in posts"
       :key="i"

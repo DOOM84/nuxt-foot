@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <app-nav />
-    <v-content :style="{'padding-top': $vuetify.breakpoint.smAndDown ? '50px' : '100px'}">
+    <v-content :style="{'padding-top': $vuetify.breakpoint.smAndDown ? '80px' : '100px'}">
       <v-container
         :style="wall"
         style="min-height: 100%"

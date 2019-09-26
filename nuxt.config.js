@@ -5,6 +5,11 @@ export default {
   /*
   ** Headers of the page
   */
+  render: {
+    static: {
+      maxAge: 1000*60*60*24*7
+    }
+  },
   head: {
     //titleTemplate: '%s - ' + process.env.npm_package_name,
     title: 'Новости европейского футбола, чемпионаты, еврокубки, результаты, матчи, команды, игроки',
