@@ -6,18 +6,15 @@
                    class="black--text">
           <v-img
             :src="post.img"
-            height="200px"
           >
           </v-img>
           <div class="text-right pr-2 caption">
             <span class="grey--text">{{post.date}} </span>
             <span class="red--text">{{post.champ_name || post.ecup_name}} </span>
           </div>
-          <v-card-title primary-title class="pt-1">
-            <div>
-              <h3 class="title mb-0">{{post.title}}</h3>
+            <div class="pa-3" >
+              <p class="title mb-0">{{post.title}}</p>
             </div>
-          </v-card-title>
         </nuxt-link>
       </v-card>
     </v-col>

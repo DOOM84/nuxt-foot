@@ -14,7 +14,7 @@
           <v-img
             class="grey lighten-2"
             :src="post.img"
-            aspect-ratio="1.8"
+            style="vertical-align: middle;"
           ></v-img>
           <v-row class="caption pa-0 ma-0">
             <v-col>

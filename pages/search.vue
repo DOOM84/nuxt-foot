@@ -87,11 +87,9 @@
 
                 </div>
 
-                <v-card-title primary-title class="pt-1">
-                  <div>
-                    <h3 class="title mb-0">{{post.title}}</h3>
-                  </div>
-                </v-card-title>
+                <div class="pa-3" >
+                  <p class="title mb-0">{{post.title}}</p>
+                </div>
               </nuxt-link>
             </v-card>
           </v-col>
