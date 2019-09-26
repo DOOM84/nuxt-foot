@@ -1,0 +1,27 @@
+{
+  "name": "nuxt-foot",
+  "version": "1.0.0",
+  "description": "Eurofootball news",
+  "author": "Artem",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "nuxt": "^2.0.0",
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/auth": "^4.8.1",
+    "@tinymce/tinymce-vue": "^2.1.0",
+    "pusher-js": "^5.0.0",
+    "vanilla-back-to-top": "^7.2.0",
+    "vue-scrollto": "^2.15.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.0.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.2.0"
+  }
+}

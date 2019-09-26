@@ -1,0 +1,48 @@
+
+.page-enter-active,
+.page-leave-active {
+  transition-property: opacity;
+  transition-timing-function: ease-in-out;
+  transition-duration: 500ms;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
+
+
+.tabLink{
+  text-decoration: none;
+}
+.tabLink:hover {
+  text-decoration: underline;
+}
+
+#back-to-top {
+  background: rgb(94, 112, 128);
+  z-index: 10000;
+}
+
+.nuxt-link-active{
+  font-weight: bold;
+}
+
+.title, .subtitle-1{
+  line-height: 1!important;
+  letter-spacing: .02em!important;
+}
+
+.v-toolbar__extension{
+  padding: 0 !important;
+}
+
+.dis-bread {
+  color: grey !important;
+  pointer-events: none
+}
+
+/*main{
+  padding-top: 100px !important;
+}*/
+
+
