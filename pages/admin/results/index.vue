@@ -7,7 +7,7 @@
         <v-btn to="/admin/results/create" color="success">Добавить результат</v-btn>
       </v-row>
     </v-col>
-    <no-ssr>
+    <client-only>
       <v-card>
         <v-card-title>
 
@@ -124,7 +124,6 @@
                 :nudge-right="40"
                 transition="scale-transition"
                 offset-y
-                full-width
                 min-width="290px"
               >
                 <template v-slot:activator="{ on }">
@@ -183,7 +182,7 @@
         </template>
       </v-data-table>
       </v-card>
-    </no-ssr>
+    </client-only>
   </div>
 
 </template>

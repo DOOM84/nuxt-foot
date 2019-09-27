@@ -7,7 +7,7 @@
         <v-btn to="/admin/teams/create" color="success">Добавить команду</v-btn>
       </v-row>
     </v-col>
-    <no-ssr>
+    <client-only>
       <v-card>
         <v-card-title>
           <div class="flex-grow-1"></div>
@@ -62,7 +62,7 @@
           </template>
         </v-data-table>
       </v-card>
-    </no-ssr>
+    </client-only>
   </div>
 
 </template>

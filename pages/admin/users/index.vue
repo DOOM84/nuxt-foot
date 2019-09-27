@@ -7,7 +7,7 @@
         <v-btn to="/admin/users/create" color="success">Добавить пользователя</v-btn>
       </v-row>
     </v-col>
-    <no-ssr>
+    <client-only>
       <v-data-table
         :headers="headers"
         :items="users"
@@ -54,7 +54,7 @@
           </v-icon>
         </template>
       </v-data-table>
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 

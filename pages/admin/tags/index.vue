@@ -7,7 +7,7 @@
         <v-btn to="/admin/tags/create" color="success">Добавить тег</v-btn>
       </v-row>
     </v-col>
-    <no-ssr>
+    <client-only>
       <v-data-table
         :headers="headers"
         :items="tags"
@@ -32,7 +32,7 @@
           </v-icon>
         </template>
       </v-data-table>
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 

@@ -10,7 +10,7 @@
 
 
 
-    <no-ssr>
+    <client-only>
       <v-card>
         <v-card-title>
 
@@ -71,7 +71,7 @@
         </template>
       </v-data-table>
       </v-card>
-    </no-ssr>
+    </client-only>
   </div>
 
 </template>

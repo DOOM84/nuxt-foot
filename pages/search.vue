@@ -45,18 +45,13 @@
               <router-link style="text-decoration: none;" class="black--text" :to="'/player/' + player.slug">
                 <v-img
                   :src="player.img"
-
                 ></v-img>
-
-                <v-card-title primary-title>
-                  <div>
+                <div class="pa-3" >
                     <h3 class="headline mb-0">{{player.name}}</h3>
                     <span class="body-2">{{player.position}}</span>
                     <img :title="player.team" style="vertical-align: middle;"
-
                          :src="player.team_icon" alt=""/>
                   </div>
-                </v-card-title>
               </router-link>
             </v-card>
           </v-col>

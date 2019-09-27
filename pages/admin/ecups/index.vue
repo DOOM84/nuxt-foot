@@ -7,7 +7,7 @@
       <v-btn to="/admin/ecups/create" color="success">Добавить eврокубок</v-btn>
     </v-row>
   </v-col>
-  <no-ssr>
+  <client-only>
   <v-data-table
     :headers="headers"
     :items="ecups"
@@ -38,7 +38,7 @@
       </v-icon>
     </template>
   </v-data-table>
-  </no-ssr>
+  </client-only>
   <v-card v-for="ecup in ecups" :key="ecup.slug" outlined tile>
     <v-card-title>{{ecup.name}}</v-card-title>
 

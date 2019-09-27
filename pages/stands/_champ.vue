@@ -7,7 +7,7 @@
         md="8"
       >
         <span>Турнирная таблица {{champ.name}}</span>
-        <no-ssr>
+        <client-only>
         <v-data-table
           :headers="ChampHeader"
           :items="champ.teams"
@@ -58,7 +58,7 @@
             </tbody>
           </template>
         </v-data-table>
-        </no-ssr>
+        </client-only>
       </v-col>
       <v-col
         cols="12"

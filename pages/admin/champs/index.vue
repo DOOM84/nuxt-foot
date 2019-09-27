@@ -7,7 +7,7 @@
         <v-btn to="/admin/champs/create" color="success">Добавить чемпионат</v-btn>
       </v-row>
     </v-col>
-    <no-ssr>
+    <client-only>
       <v-data-table
         :headers="headers"
         :items="champs"
@@ -35,7 +35,7 @@
           </v-icon>
         </template>
       </v-data-table>
-    </no-ssr>
+    </client-only>
 
   <v-card outlined tile>
 

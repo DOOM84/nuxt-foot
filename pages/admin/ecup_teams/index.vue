@@ -7,7 +7,7 @@
         <v-btn to="/admin/ecup_teams/create" color="success">Добавить команду (еврокубки)</v-btn>
       </v-row>
     </v-col>
-    <no-ssr>
+    <client-only>
       <v-card>
         <v-card-title>
           <div class="flex-grow-1"></div>
@@ -52,7 +52,7 @@
           </template>
         </v-data-table>
       </v-card>
-    </no-ssr>
+    </client-only>
   </div>
 
 </template>
