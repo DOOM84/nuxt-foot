@@ -8,7 +8,11 @@
         fluid
         >
         <v-row>
-          <v-col cols="12" class="pa-0">
+            <v-col
+              offset-xl="2"
+              xl="8"
+              class="pa-0"
+            >
           <nuxt class="pl-0 pr-0 pt-0 mt-5"  />
           </v-col>
         </v-row>

@@ -194,7 +194,7 @@
     color="black darken-3"
     dark
   >
-    <v-app-bar-nav-icon class="pl-5 hidden-md-and-up" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon class="hidden-md-and-up" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     <v-toolbar-title>
       <h2 :class="{'subtitle-1': $vuetify.breakpoint.xs}"><nuxt-link style="text-decoration: none" class="white--text" to="/"><strong>НОВОСТИ ЕВРОФУТБОЛА</strong></nuxt-link></h2>
     </v-toolbar-title>

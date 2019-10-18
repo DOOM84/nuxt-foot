@@ -104,12 +104,11 @@
                   <v-img
                     :src="player.img"
                   ></v-img>
-                  <v-card-title primary-title>
-                    <div>
-                      <h3 class="headline mb-0">{{player.name}}</h3>
-                      <div class="body-2">{{player.player_detail.player_position.name}}</div>
-                    </div>
-                  </v-card-title>
+                  <div class="pl-4" >
+                    <p class="headline mb-0">{{player.name}}</p>
+                    <div class="body-2 pb-2">{{player.player_detail.player_position.name}}</div>
+                  </div>
+
                 </router-link>
               </v-card>
           </v-col>

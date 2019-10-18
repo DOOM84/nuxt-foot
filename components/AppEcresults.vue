@@ -10,6 +10,7 @@
     :prev-icon="prevIcon ? 'mdi-arrow-left-bold-box-outline' : undefined"
     :next-icon="nextIcon ? 'mdi-arrow-right-bold-box-outline' : undefined"
     :icons-and-text="icons"
+    show-arrows
   >
     <v-tabs-slider></v-tabs-slider>
 
