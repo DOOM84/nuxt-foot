@@ -138,7 +138,9 @@
             }.bind(this));
             this.resultChannel = pusher.subscribe('resultChannel');
             this.resultChannel.bind('App\\Events\\ResultEvent', function({result}){
-                this.$store.commit('home/SET_LIVERES', result);
+                if(!result.hasOwnProperty('ecup_id')){
+                    this.$store.commit('home/SET_LIVERES', result);
+                }
             }.bind(this));
 
         },
@@ -147,6 +149,7 @@
         },
         beforeDestroy() {
             this.postChannel.unbind();
+            this.resultChannel.unbind();
         }
     }
 </script>

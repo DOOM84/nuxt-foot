@@ -6,7 +6,32 @@
         sm="12"
         md="8"
       >
-        <span>Турнирная таблица {{champ.name}}</span>
+        <v-row class="pl-5 pr-5 pt-2 pb-2">
+          <span v-if="archDesc">{{archDesc}}. <v-btn text small class="text-right" @click="getArchInfo('')">Вернуться</v-btn></span>
+          <span v-else>Турнирная таблица {{champ.name}}. </span>
+          <v-spacer></v-spacer>
+
+          <v-menu v-if="years.length" offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                color="dark"
+                dark
+                v-on="on"
+              >
+                Архив. Сезоны
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(year, index) in years"
+                :key="index"
+                @click="getArchInfo(year)"
+              >
+                <v-list-item-title>{{ year }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-row>
         <client-only>
         <v-data-table
           :headers="ChampHeader"
@@ -191,23 +216,39 @@
 
                 ],
                 champ:'',
+                years:'',
                 postChannel: null,
+                archDesc: '',
+                archTeams: [],
                 posts:''
             }
         },
         async asyncData({store, params}) {
             try {
-                const {champs} = await store.dispatch('home/fetchChamps');
+                const {champ, years} = await store.dispatch('home/fetchChamp', params.champ);
                 const {posts} = await store.dispatch('home/fetchPosts');
 
                 return {
                     posts: posts.filter((post, idx) => idx <= 9),
-                    champ: champs.find(champ => champ.slug === params.champ)
+                    years,
+                    champ/*: champs.find(champ => champ.slug === params.champ)*/
                 }
             } catch (error) {
                 /*if (error.response.status === 401) {
                     return $nuxt.$router.replace('/login');
                 }*/
+            }
+        },
+        computed: {
+            teams(){
+                return this.archTeams.length ? this.archTeams : this.champ.teams
+            }
+        },
+        methods: {
+            async getArchInfo(year){
+                const {teams} = await this.$store.dispatch('calendar/fetchArchStands', {'champ':this.champ.slug, 'season': year});
+                this.champ.teams = teams;
+                this.archDesc = year ? `Турнирная таблица ${this.champ.name}. Сезон ${year}` : ''
             }
         },
         mounted(){

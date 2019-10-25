@@ -92,5 +92,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+  .isLive {
+    color: red;
+  }
 </style>

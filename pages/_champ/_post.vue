@@ -91,6 +91,13 @@
           tile
           class="elevation-2"
         >
+          <app-results :tour="champ.tour" :results="champ.results"/>
+        </v-card>
+        <v-card
+          outlined
+          tile
+          class="elevation-2 mt-4"
+        >
           <app-stands :teams="champ.teams" />
         </v-card>
         <h3 class="pt-3 pl-2">{{champ.name}}. Новости</h3>
@@ -109,6 +116,7 @@
 
 <script>
     import AppStands from "@/components/AppStands";
+    import AppResults from "@/components/AppResults";
     import AppPosts from "@/components/AppPosts";
     import Comments from "@/components/comments";
     import CommentForm from "@/components/commentForm";
@@ -131,11 +139,12 @@
                 posts: '',
                 champ:'',
                 comments:'',
-                postChannel: null
+                postChannel: null,
+                resultChannel: null
             }
         },
         components: {
-            AppStands, AppPosts, Comments, CommentForm
+            AppStands, AppResults, AppPosts, Comments, CommentForm
         },
         async asyncData({store, params}) {
             try {
@@ -209,10 +218,17 @@
                     if(this.posts.length > 10){this.posts.splice(-1,1)}
                 }
             }.bind(this));
+            this.resultChannel = pusher.subscribe('resultChannel');
+            this.resultChannel.bind('App\\Events\\ResultEvent', function({result}){
+                if(!result.hasOwnProperty('ecup_id')){
+                    this.$store.commit('home/SET_LIVERES', result);
+                }
+            }.bind(this));
 
         },
         beforeDestroy() {
             this.postChannel.unbind();
+            this.resultChannel.unbind();
             this.$store.commit('auth/SET_ANSWER', null);
             this.$store.commit('auth/SET_ADDED_ANSWER', null);
         }

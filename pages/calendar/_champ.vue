@@ -6,7 +6,36 @@
         sm="12"
         md="8"
       >
-        <span>Календарь {{champ.name}}</span>
+        <v-row class="pl-5 pr-5 pt-2 pb-2">
+          <span v-if="archDesc">{{archDesc}}. <v-btn text small class="text-right" @click="getArchInfo('')">Вернуться</v-btn></span>
+          <span v-else>Календарь {{champ.name}}. </span>
+
+
+          <v-spacer></v-spacer>
+
+          <v-menu v-if="years.length" offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                color="dark"
+                dark
+                v-on="on"
+              >
+                Архив. Сезоны
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(year, index) in years"
+                :key="index"
+                @click="getArchInfo(year)"
+              >
+                <v-list-item-title>{{ year }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-row>
+
+
         <template v-for="(matches, tour) in results">
           <div class="elevation-10 white--text text-center pa-2" style="width: 100%; background: black" >
             <span class="subheading font-weight-black" >{{tour}}-й тур.</span>
@@ -95,25 +124,35 @@
         data: function () {
             return {
                 results: '',
+                years: '',
                 posts: '',
                 champ: '',
+                archDesc: '',
                 postChannel: null
             }
         },
         async asyncData({store, params}) {
             try {
                 const {posts} = await store.dispatch('home/fetchPosts');
-                const {results} = await store.dispatch('calendar/fetchCalendar', params.champ);
+                const {results, years} = await store.dispatch('calendar/fetchCalendar', params.champ);
 
                 return {
                     posts: posts.filter((post, idx) => idx <= 9),
                     results,
+                    years,
                     champ: store.getters['home/menuChamps'].find(champ => champ.slug === params.champ)
                 }
             } catch (error) {
                 /*if (error.response.status === 401) {
                     return $nuxt.$router.replace('/login');
                 }*/
+            }
+        },
+        methods: {
+            async getArchInfo(year){
+                const {results} = await this.$store.dispatch('calendar/fetchArchCalendar', {'champ':this.champ.slug, 'season': year});
+                this.results = results;
+                this.archDesc = year ? `Календарь ${this.champ.name}. Сезон ${year}` : ''
             }
         },
         mounted(){
@@ -125,7 +164,8 @@
         },
         beforeDestroy() {
             this.postChannel.unbind();
-        }
+        },
+
     }
 </script>
 

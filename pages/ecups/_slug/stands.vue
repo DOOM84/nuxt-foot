@@ -6,7 +6,32 @@
         sm="12"
         md="8"
       >
-        <span>Турнирные таблицы {{ecup.name}}</span>
+        <v-row class="pl-5 pr-5 pt-2 pb-2">
+          <span v-if="archDesc">{{archDesc}}. <v-btn text small class="text-right" @click="getArchInfo('')">Вернуться</v-btn></span>
+          <span v-else>Турнирные таблицы {{ecup.name}}. </span>
+          <v-spacer></v-spacer>
+
+          <v-menu v-if="years.length" offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                color="dark"
+                dark
+                v-on="on"
+              >
+                Архив. Сезоны
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(year, index) in years"
+                :key="index"
+                @click="getArchInfo(year)"
+              >
+                <v-list-item-title>{{ year }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-row>
         <v-card v-for="(teams, group) in sortArr(ecup.teams)"
                 :key="group"
                 outlined
@@ -114,22 +139,32 @@
             return {
                 ecup:'',
                 posts: '',
+                years:'',
+                archDesc:'',
                 postChannel: null,
             }
         },
         async asyncData({store, params}) {
             try {
-                const {ecup} = await store.dispatch('ecups/ecupWithTeams', params.slug);
+                const {ecup, years} = await store.dispatch('ecups/ecupWithTeams', params.slug);
                 const {posts} = await store.dispatch('home/fetchPosts');
 
                 return {
                     posts: posts.filter((post, idx) => idx <= 9),
-                    ecup
+                    ecup,
+                    years
                 }
             } catch (error) {
                 /*if (error.response.status === 401) {
                     return $nuxt.$router.replace('/login');
                 }*/
+            }
+        },
+        methods: {
+            async getArchInfo(year){
+                const {teams} = await this.$store.dispatch('ecups/fetchArchStands', {'ecup':this.ecup.slug, 'season': year});
+                this.ecup.teams = teams;
+                this.archDesc = year ? `Турнирные таблицы ${this.ecup.name}. Сезон ${year}` : ''
             }
         },
         mounted(){

@@ -6,8 +6,34 @@
         sm="12"
         md="8"
       >
-        <span>Календарь {{ecup.name}}</span>
-        <v-simple-table class="elevation-10">
+        <v-row class="pl-5 pr-5 pt-2 pb-2">
+          <span v-if="archDesc">{{archDesc}}. <v-btn text small class="text-right" @click="getArchInfo('')">Вернуться</v-btn></span>
+          <span v-else>Календарь {{ecup.name}}. </span>
+          <v-spacer></v-spacer>
+
+          <v-menu v-if="years.length" offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                color="dark"
+                dark
+                v-on="on"
+              >
+                Архив. Сезоны
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(year, index) in years"
+                :key="index"
+                @click="getArchInfo(year)"
+              >
+                <v-list-item-title>{{ year }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-row>
+        <client-only>
+          <v-simple-table class="elevation-10">
             <template v-for="(games, group) in sortArr(ecup.results)">
               <tr style="background: black; color: white">
                 <th class="subtitle-1 font-weight-bold text-left white--text text-center" colspan="5">
@@ -68,6 +94,8 @@
               </template>
             </template>
           </v-simple-table>
+        </client-only>
+
       </v-col>
       <v-col
         cols="12"
@@ -107,23 +135,33 @@
         data(){
             return {
                 ecup:'',
+                years:'',
                 posts: '',
+                archDesc: '',
                 postChannel: null,
             }
         },
         async asyncData({store, params}) {
             try {
-                const {ecup} = await store.dispatch('ecups/ecupWithResults', params.slug);
+                const {ecup, years} = await store.dispatch('ecups/ecupWithResults', params.slug);
                 const {posts} = await store.dispatch('home/fetchPosts');
 
                 return {
                     posts: posts.filter((post, idx) => idx <= 9),
-                    ecup
+                    ecup,
+                    years
                 }
             } catch (error) {
                 /*if (error.response.status === 401) {
                     return $nuxt.$router.replace('/login');
                 }*/
+            }
+        },
+        methods: {
+            async getArchInfo(year){
+                const {results} = await this.$store.dispatch('ecups/fetchArchCalendar', {'ecup':this.ecup.slug, 'season': year});
+                this.ecup.results = results;
+                this.archDesc = year ? `Календарь ${this.ecup.name}. Сезон ${year}` : ''
             }
         },
         mounted(){

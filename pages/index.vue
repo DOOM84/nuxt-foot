@@ -228,7 +228,10 @@ export default {
 
         this.resultChannel = pusher.subscribe('resultChannel');
         this.resultChannel.bind('App\\Events\\ResultEvent', function({result}){
-            this.$store.commit('home/SET_LIVERES', result);
+            if(!result.hasOwnProperty('ecup_id')){
+                this.$store.commit('home/SET_LIVERES', result);
+            }
+
             /*let ind = this.champs.findIndex(x => x.id === result.champ_id);
             let resInd = this.champs[ind].results[result.date].findIndex(res => res.id === result.id);
             this.champs[ind].results[result.date][resInd].res1 = result.res1;

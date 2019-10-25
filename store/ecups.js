@@ -39,7 +39,22 @@ export const actions = {
     } catch (error) {
       throw error;
     }
-  }
+  },
+
+  async fetchArchCalendar({}, data) {
+    try {
+      return await this.$axios.$get(`getArchEcupCalendar/${data.ecup}/${data.season}`);
+    } catch (error) {
+      throw error;
+    }
+  },
+  async fetchArchStands({}, data) {
+    try {
+      return await this.$axios.$get(`getArchEcupStands/${data.ecup}/${data.season}`);
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export const getters = {

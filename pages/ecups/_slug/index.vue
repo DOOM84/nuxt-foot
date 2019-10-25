@@ -172,7 +172,16 @@
             }.bind(this));
             this.resultChannel = pusher.subscribe('resultChannel');
             this.resultChannel.bind('App\\Events\\ResultEvent', function({result}){
-                this.$store.commit('home/SET_LIVERES', result);
+
+                if(result.hasOwnProperty('ecup_id') && result.ecup_id === this.ecup.id){
+                    let liveResults = this.ecup.results[result.group][result.tour][result.date][result.time];
+                    if (typeof liveResults !== 'undefined'){
+                        let ind = liveResults.findIndex(x => x.id === result.id);
+                        this.ecup.results[result.group][result.tour][result.date][result.time][ind].res1 = result.res1;
+                        this.ecup.results[result.group][result.tour][result.date][result.time][ind].res2 = result.res2;
+                        this.ecup.results[result.group][result.tour][result.date][result.time][ind].is_live = result.is_live;
+                    }
+                }
             }.bind(this));
 
         },
@@ -181,6 +190,7 @@
         },
         beforeDestroy() {
             this.postChannel.unbind();
+            this.resultChannel.unbind();
         }
     }
 </script>

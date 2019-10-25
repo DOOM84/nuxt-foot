@@ -157,6 +157,14 @@
             <v-list-item-title>Api (составы)</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item class="pt-5">
+          <v-btn :loading="loading"
+            color="error"
+            @click="dialog=true"
+          >
+            Следующий сезон
+          </v-btn>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -202,7 +210,6 @@
         </v-btn>
       </template>
     </v-app-bar>
-
     <v-content>
       <v-container
         fluid
@@ -214,6 +221,24 @@
         </v-row>
       </v-container>
     </v-content>
+    <v-row v-if="dialog" justify="center">
+      <v-dialog v-model="dialog" persistent max-width="290">
+        <v-card>
+          <v-card-title class="headline">Внимание!</v-card-title>
+          <v-card-text>
+            Данные турнирных таблиц и результатов всех чемпионатов и
+            еврокубков будут скопированы в архивные таблицы,
+            а оригинальные таблицы, результаты и голевая статистика всех игроков будут обнулены.
+            Вы уверены?
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="dialog = false">Отмена</v-btn>
+            <v-btn color="green darken-1" text @click="newSeason">Ок</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
     <v-footer
       color="indigo"
       app
@@ -226,7 +251,7 @@
 <script>
     export default {
         data() {
-            return {drawer: null}
+            return {drawer: null, loading:false, dialog: false}
         },
         computed: {
             color(){
@@ -246,5 +271,28 @@
                 }
             },
         },
+        methods: {
+            async newSeason(){
+
+                try {
+                    this.dialog = false;
+                    this.loading = true;
+                    await this.$store.dispatch('home/newSeason');
+                    this.loading = false;
+                    this.$store.commit('auth/SET_SNACKBAR', {
+                        show: true,
+                        text: 'Успешно',
+                        color: 'success'
+                    });
+                } catch (error) {
+                    this.$store.commit('auth/SET_SNACKBAR', {
+                        show: true,
+                        text: error,
+                        color: 'error'
+                    });
+                }
+
+            }
+        }
     }
 </script>

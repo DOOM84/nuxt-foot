@@ -141,7 +141,8 @@
                 prevIcon: false,
                 nextIcon: false,
                 right: false,
-                postChannel: null
+                postChannel: null,
+                resultChannel: null
             }
         },
         components: {
@@ -217,10 +218,24 @@
                     if(this.posts.length > 10){this.posts.splice(-1,1)}
                 }
             }.bind(this));
+            this.resultChannel = pusher.subscribe('resultChannel');
+            this.resultChannel.bind('App\\Events\\ResultEvent', function({result}){
+
+                if(result.hasOwnProperty('ecup_id') && result.ecup_id === this.ecup.id){
+                    let liveResults = this.ecup.results[result.group][result.tour][result.date][result.time];
+                    if (typeof liveResults !== 'undefined'){
+                        let ind = liveResults.findIndex(x => x.id === result.id);
+                        this.ecup.results[result.group][result.tour][result.date][result.time][ind].res1 = result.res1;
+                        this.ecup.results[result.group][result.tour][result.date][result.time][ind].res2 = result.res2;
+                        this.ecup.results[result.group][result.tour][result.date][result.time][ind].is_live = result.is_live;
+                    }
+                }
+            }.bind(this));
 
         },
         beforeDestroy() {
             this.postChannel.unbind();
+            this.resultChannel.unbind();
             this.$store.commit('auth/SET_ANSWER', null);
             this.$store.commit('auth/SET_ADDED_ANSWER', null);
         }

@@ -27,11 +27,14 @@ export const mutations = {
   },
   SET_LIVERES(state, result) {
     let ind = state.champs.findIndex(x => x.id === result.champ_id);
-    let resInd = state.champs[ind].results[result.date].findIndex(res => res.id === result.id);
-    state.champs[ind].results[result.date][resInd].res1 = result.res1;
-    state.champs[ind].results[result.date][resInd].res2 = result.res2;
-    state.champs[ind].results[result.date][resInd].is_live = result.is_live;
-  },
+    let liveResults = state.champs[ind].results[result.date];
+    if(typeof liveResults !== 'undefined'){
+      let resInd = state.champs[ind].results[result.date].findIndex(res => res.id === result.id);
+      state.champs[ind].results[result.date][resInd].res1 = result.res1;
+      state.champs[ind].results[result.date][resInd].res2 = result.res2;
+      state.champs[ind].results[result.date][resInd].is_live = result.is_live;
+    }
+  }
 
 };
 
@@ -67,6 +70,13 @@ export const actions = {
       throw error;
     }
   },
+  async fetchChamp({}, champ) {
+    try {
+      return await this.$axios.$get(`getChamp/${champ}`);
+    } catch (error) {
+      throw error;
+    }
+  },
   async fetchTopMenuChamps({commit}) {
     try {
       let result;
@@ -83,6 +93,13 @@ export const actions = {
       result =  await this.$axios.$get(`getTopMenuEcups`);
       commit('SET_MENU_ECUPS', result.ecups);
       return result;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async newSeason() {
+    try {
+      await this.$axios.$get('admin/newSeason');
     } catch (error) {
       throw error;
     }
