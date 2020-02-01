@@ -34,7 +34,7 @@
         </v-row>
         <client-only>
           <v-simple-table class="elevation-10">
-            <template v-for="(games, group) in sortArr(ecup.results)">
+            <template v-for="(games, group) in ecup.results ? sortArr(ecup.results) : ecup.results">
               <tr style="background: black; color: white">
                 <th class="subtitle-1 font-weight-bold text-left white--text text-center" colspan="5">
                   Группа {{group}}
@@ -92,6 +92,66 @@
 
                 </template>
               </template>
+            </template>
+          </v-simple-table>
+
+          <v-simple-table class="elevation-10 mt-3">
+            <template v-for="(dates, playoff) in ecup.playOffResults ? sortArr(ecup.playOffResults) : ecup.playOffResults">
+              <tr style="background: black; color: white">
+                <th class="subtitle-1 font-weight-bold text-left white--text text-center" colspan="5">
+                  {{playoff}}
+                </th>
+              </tr>
+                <template v-for="(times, date) in dates">
+                  <tr>
+                    <th class="pa-0 ma-0 text-center" style="background-color: #d9e3e6" colspan="5">
+                      {{date}}
+                    </th>
+                  </tr>
+                  <template v-for="(matches, time) in times">
+                    <tr>
+                      <th class="pa-0 ma-0 text-center" style="background-color: #F5F5F5" colspan="5">
+                        {{time}}
+                      </th>
+                    </tr>
+                    <template v-for="match in matches">
+                      <tr>
+                        <td style="width: 35%" class="text-center pa-0 ma-0">
+                          <img class="text-center"
+                               :src="match.team11.img" alt="">
+                          <br>
+
+                          <nuxt-link v-if="match.team11.champ_id" class="black--text tabLink" :to="'/team/' + match.team11.team.slug">
+                            {{ match.team11.name }}
+                          </nuxt-link>
+
+                          <span v-else>{{ match.team11.name }}</span>
+                        </td>
+
+                        <td :class="{ 'isLive': match.is_live, 'text-center pa-0 ma-0' : true }">
+                          {{match.res1}}
+                        </td>
+                        <td :class="{ 'isLive': match.is_live,  'text-center pa-0 ma-0' : true}">
+                          :
+                        </td>
+                        <td :class="{ 'isLive': match.is_live, 'text-center pa-0 ma-0' : true }">
+                          {{match.res2}}
+                        </td>
+                        <td style="width: 35%" class="text-center  pa-0 ma-0">
+                          <img class="text-center"
+                               :src="match.team22.img" alt="">
+                          <br>
+                          <nuxt-link v-if="match.team22.champ_id" class="black--text tabLink" :to="'/team/' + match.team22.team.slug">
+                            {{ match.team22.name }}
+                          </nuxt-link>
+                          <span v-else>{{ match.team22.name }}</span>
+                        </td>
+                      </tr>
+
+                    </template>
+                  </template>
+
+                </template>
             </template>
           </v-simple-table>
         </client-only>
@@ -159,8 +219,9 @@
         },
         methods: {
             async getArchInfo(year){
-                const {results} = await this.$store.dispatch('ecups/fetchArchCalendar', {'ecup':this.ecup.slug, 'season': year});
+                const {results, playOffResults} = await this.$store.dispatch('ecups/fetchArchCalendar', {'ecup':this.ecup.slug, 'season': year});
                 this.ecup.results = results;
+                this.ecup.playOffResults = playOffResults;
                 this.archDesc = year ? `Календарь ${this.ecup.name}. Сезон ${year}` : ''
             }
         },

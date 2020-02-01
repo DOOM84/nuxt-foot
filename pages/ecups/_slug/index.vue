@@ -89,6 +89,15 @@
           tile
           class="elevation-2"
         >
+          <app-poresults v-if="ecup.playoff" :ecup="ecup" :prevIcon="prevIcon" :nextIcon="nextIcon" :icons="icons" :right="right" :grow="grow"
+                         :centered="centered" :vertical="vertical"/>
+        </v-card>
+
+        <v-card
+          outlined
+          tile
+          class="elevation-2 mt-3"
+        >
           <app-ecresults :ecup="ecup" :prevIcon="prevIcon" :nextIcon="nextIcon" :icons="icons" :right="right" :grow="grow"
                          :centered="centered" :vertical="vertical"/>
         </v-card>
@@ -102,6 +111,7 @@
 <script>
     import AppCarousel from "@/components/AppCarousel";
     import AppEcresults from "@/components/AppEcresults";
+    import AppPoresults from "@/components/AppPoresults";
     import AppPosts from "@/components/AppPosts";
     import pusher from "@/plugins/pusher";
     export default {
@@ -116,7 +126,7 @@
                 ]
             }
         },
-        components: {AppCarousel, AppEcresults, AppPosts},
+        components: {AppCarousel, AppEcresults, AppPoresults, AppPosts},
         data(){
             return {
                 posts:'',
@@ -172,15 +182,25 @@
             }.bind(this));
             this.resultChannel = pusher.subscribe('resultChannel');
             this.resultChannel.bind('App\\Events\\ResultEvent', function({result}){
-
-                if(result.hasOwnProperty('ecup_id') && result.ecup_id === this.ecup.id){
-                    let liveResults = this.ecup.results[result.group][result.tour][result.date][result.time];
-                    if (typeof liveResults !== 'undefined'){
-                        let ind = liveResults.findIndex(x => x.id === result.id);
-                        this.ecup.results[result.group][result.tour][result.date][result.time][ind].res1 = result.res1;
-                        this.ecup.results[result.group][result.tour][result.date][result.time][ind].res2 = result.res2;
-                        this.ecup.results[result.group][result.tour][result.date][result.time][ind].is_live = result.is_live;
-                    }
+              console.log(result);
+              if(result.hasOwnProperty('ecup_id') && result.ecup_id === this.ecup.id){
+                if(result.playoff != null){
+                  let liveResults = this.ecup.playOffResults[result.playoff][result.date][result.time];
+                  if (typeof liveResults !== 'undefined'){
+                    let ind = liveResults.findIndex(x => x.id === result.id);
+                    this.ecup.playOffResults[result.playoff][result.date][result.time][ind].res1 = result.res1;
+                    this.ecup.playOffResults[result.playoff][result.date][result.time][ind].res2 = result.res2;
+                    this.ecup.playOffResults[result.playoff][result.date][result.time][ind].is_live = result.is_live;
+                  }
+                }else{
+                   let liveResults = this.ecup.results[result.group][result.tour][result.date][result.time];
+                     if (typeof liveResults !== 'undefined'){
+                         let ind = liveResults.findIndex(x => x.id === result.id);
+                         this.ecup.results[result.group][result.tour][result.date][result.time][ind].res1 = result.res1;
+                         this.ecup.results[result.group][result.tour][result.date][result.time][ind].res2 = result.res2;
+                         this.ecup.results[result.group][result.tour][result.date][result.time][ind].is_live = result.is_live;
+                     }
+                 }
                 }
             }.bind(this));
 

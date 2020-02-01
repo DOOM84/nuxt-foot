@@ -8,7 +8,10 @@
         md="12"
         class="text-center"
       >
-                <v-btn class="mr-3" v-for="tour in tours" :key="tour" color="success" @click="getResults(tour)">{{tour}} тур</v-btn>
+        <v-btn class="mr-3" v-for="tour in tours" :key="tour" color="success" @click="getResults(tour, false)">{{tour}} тур</v-btn>
+        <v-btn class="mr-3" v-for="playoff in playoffs" :key="playoff.stage" color="success" @click="getResults(playoff, true)">
+          {{playoff.name}}
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -34,15 +37,30 @@
                     },
                 ],
                 tours: [1,2,3,4,5,6],
+              playoffs:[
+                {
+                  stage:'ROUND_OF_16',
+                  name:'1/8 финала'
+                }
+              ]
             }
         },
         methods: {
-            async getResults(tour) {
+            async getResults(tour, playoff) {
                 try {
+                  /*if(!playoff){
                     const {games} = await this.$axios.$get(`admin/apiLchResults/${tour}`);
+                  }else{
+                    const {games} = await this.$axios.$get(`admin/apiLchPoResults/${playoff.stage}`);
+                  }*/
+                    //const {games} = await this.$axios.$get(`admin/apiLchResults/${tour}`);
+                    //https://api.football-data.org/v2/competitions/CL/matches?stage=ROUND_OF_16
+                  const {games} = !playoff ? await this.$axios.$get(`admin/apiLchResults/${tour}`)
+                    : await this.$axios.$get(`admin/apiLchPoResults/${tour.stage}`);
 
-                    let allResults = games.matches;
-                   // const champ = games.competition.area.name.toLowerCase();
+                  let allResults = games.matches;
+
+                  // const champ = games.competition.area.name.toLowerCase();
                     const results = [];
 
                     for (var k in allResults) {
@@ -51,14 +69,17 @@
                             'team2': allResults[k].awayTeam.name,
                             'res1': allResults[k].score.fullTime.homeTeam,
                             'res2': allResults[k].score.fullTime.awayTeam,
-                            'tour': allResults[k].matchday,
+                            'tour': playoff ? 0 : allResults[k].matchday,
                             'ecup_id': 1,
-                            'group': allResults[k].group.slice(-1),
+                            'group': !playoff ? allResults[k].group.slice(-1) : null,
+                            'playoff': playoff ? tour.name : null,
                             'date': allResults[k].utcDate.substring(0, 10),
                             'time': allResults[k].utcDate.substring(allResults[k].utcDate.length - 9).substring(0, 5),
                         }
                     }
-                    await this.$axios.$post('admin/updLchTourResult', {'results': results, 'ecup_id': 1, 'tour': tour});
+                  //console.log(results);
+                  //return false;
+                    await this.$axios.$post('admin/updLchTourResult', {'results': results, 'ecup_id': 1/*, 'tour': tour*/});
 
                     this.$store.commit('auth/SET_SNACKBAR', {
                         show: true,

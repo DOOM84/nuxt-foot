@@ -32,7 +32,7 @@
             </v-list>
           </v-menu>
         </v-row>
-        <v-card v-for="(teams, group) in sortArr(ecup.teams)"
+        <v-card v-for="(teams, group) in ecup.teams ? sortArr(ecup.teams) : ecup.teams"
                 :key="group"
                 outlined
                 tile
