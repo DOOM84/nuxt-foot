@@ -41,6 +41,10 @@
                 {
                   stage:'ROUND_OF_16',
                   name:'1/8 финала'
+                },
+                {
+                  stage:'ROUND_OF_8',
+                  name:'1/4 финала'
                 }
               ]
             }
